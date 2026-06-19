@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Peeyush Tiwari | AI Engineer & Developer Portfolio</title>
+  <meta name="description" content="Portfolio of Peeyush Tiwari - AI Engineer, Python Developer, and Android Developer. Pre-final year BCA student specializing in Agentic AI, OpenCV, and MVVM Kotlin apps.">
+  <meta name="keywords" content="Peeyush Tiwari, AI Engineer, Python Developer, Android Developer, Agentic AI, Machine Learning, OpenCV, Portfolio">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Three.js Library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  
+  <!-- Styling -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Scroll Progress Bar -->
+  <div id="scroll-progress" class="scroll-progress"></div>
+
+  <!-- Custom Cursor -->
+  <div class="custom-cursor" id="custom-cursor"></div>
+  <div class="custom-cursor-dot" id="custom-cursor-dot"></div>
+
+  <!-- Interactive Background Canvas -->
+  <canvas id="neural-canvas"></canvas>
+
+  <!-- Custom Loader -->
+  <div class="loader-wrapper" id="loader">
+    <div class="loader-content">
+      <div class="loader-terminal">
+        <span class="terminal-prompt">$</span>
+        <span class="terminal-text" id="loader-text">initializing_portfolio_</span>
+      </div>
+      <div class="loader-progress-bar">
+        <div class="loader-progress" id="loader-progress"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Header & Navigation -->
+  <header>
+    <nav class="glass-nav">
+      <div class="nav-logo">
+        <a href="#hero" class="gradient-text">PEEYUSH<span>.dev</span></a>
+      </div>
+      <div class="nav-toggle" id="nav-toggle">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#hero" class="active">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section id="hero" class="hero-section">
+      <div class="container hero-container">
+        <div class="hero-content">
+          <div class="hero-badge">
+            <span class="pulse-dot"></span> Available for Internships & Projects
+          </div>
+          <h1 class="hero-title">
+            Hi, I'm <span class="gradient-text">Peeyush Tiwari</span>
+          </h1>
+          <h2 class="hero-subtitle">
+            I am a <span class="typewriter" id="typewriter-text"></span><span class="cursor-blink">|</span>
+          </h2>
+          <p class="hero-description">
+            Pre-final year BCA student at IGNTU with hands-on experience in AI/ML, Python, Android (Kotlin), and full-stack project delivery. Passionate about solving real-world problems through intelligent automation, LLM API integration, and agentic AI workflows.
+          </p>
+          <div class="hero-buttons">
+            <a href="#projects" class="btn btn-primary">
+              View Projects 
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="#contact" class="btn btn-outline">Let's Connect</a>
+          </div>
+          <div class="hero-socials">
+            <a href="https://github.com/peeyushtiwari" target="_blank" aria-label="GitHub">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+            </a>
+            <a href="https://linkedin.com/in/peeyushtiwari18" target="_blank" aria-label="LinkedIn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+            </a>
+            <a href="mailto:peeyushtiwari03@gmail.com" aria-label="Email">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            </a>
+            <a href="tel:+919202261369" aria-label="Phone">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            </a>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="profile-card-glow"></div>
+          
+          <!-- Unified Developer IDE Cockpit -->
+          <div class="developer-ide">
+            <!-- IDE Header -->
+            <div class="ide-header">
+              <div class="ide-controls">
+                <span class="control-dot red"></span>
+                <span class="control-dot yellow"></span>
+                <span class="control-dot green"></span>
+              </div>
+              <div class="ide-tabs">
+                <div class="ide-tab active">
+                  <svg class="tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:12px; height:12px; color:#ffbd2e;"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                  <span>peeyush_tiwari.py</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- IDE Workspace -->
+            <div class="ide-workspace">
+              <!-- Left Sidebar: Dashboard Metrics -->
+              <div class="ide-sidebar">
+                <!-- System Load Dial -->
+                <div class="sidebar-section">
+                  <div class="section-header">
+                    <span class="sidebar-dot blue"></span>
+                    <span>SYSTEM_LOAD</span>
+                  </div>
+                  <div class="sidebar-body">
+                    <div class="radial-loader">
+                      <svg viewBox="0 0 36 36" class="circular-chart">
+                        <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path class="circle" id="system-load-circle" stroke-dasharray="82, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                      </svg>
+                      <div class="percentage" id="system-load-percentage">82%</div>
+                    </div>
+                    <div class="radar-metrics">
+                      <span class="radar-label font-code">Agent_Accuracy</span>
+                      <span class="radar-status font-code green" id="system-load-status">OPTIMAL</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Git Contributions Graph -->
+                <div class="sidebar-section">
+                  <div class="section-header">
+                    <span class="sidebar-dot purple"></span>
+                    <span>GIT_ACTIVITY</span>
+                  </div>
+                  <div class="sidebar-body">
+                    <div class="git-grid" id="git-contribution-grid">
+                      <!-- Dynamically populated by JS (7 rows x 15 columns) -->
+                    </div>
+                    <div class="git-stats-row">
+                      <span class="git-stats" id="git-stats-commits">1,248 commits</span>
+                      <span class="git-stats-pct" id="git-stats-pct">+18%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Main Code Editor Panel -->
+              <div class="ide-editor font-code">
+                <div class="line-numbers">
+                  <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span>
+                </div>
+                <div class="code-content">
+                  <p><span class="keyword">class</span> <span class="class-name">Developer</span>:</p>
+                  <p class="indent-1"><span class="keyword">def</span> <span class="func-name">__init__</span>(self):</p>
+                  <p class="indent-2">self.name = <span class="str">"Peeyush Tiwari"</span></p>
+                  <p class="indent-2">self.role = [</p>
+                  <p class="indent-3"><span class="str">"AI Engineer"</span>,</p>
+                  <p class="indent-3"><span class="str">"Python Dev"</span>,</p>
+                  <p class="indent-3"><span class="str">"Android Dev"</span></p>
+                  <p class="indent-2">]</p>
+                  <p class="indent-2">self.education = <span class="str">"BCA @ IGNTU"</span></p>
+                  <p class="indent-2">self.skills = [<span class="str">"LLMs"</span>, <span class="str">"Kotlin"</span>, <span class="str">"n8n"</span>]</p>
+                  <br>
+                  <p class="indent-1"><span class="keyword">def</span> <span class="func-name">is_passionate</span>(self):</p>
+                  <p class="indent-2"><span class="keyword">return</span> <span class="keyword">True</span></p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Bottom Terminal Panel -->
+            <div class="ide-terminal">
+              <div class="terminal-header">
+                <span class="sidebar-dot green pulse-dot-small"></span>
+                <span class="terminal-title font-code">TERMINAL: AI_AGENT_MONITOR</span>
+                <span class="terminal-badge font-code">LIVE</span>
+              </div>
+              <div class="widget-terminal-console font-code" id="widget-agent-logs">
+                <div class="log-line text-muted">&gt; initializing agent...</div>
+                <div class="log-line text-success">&gt; system load: optimal</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="scroll-indicator">
+        <a href="#about" aria-label="Scroll down">
+          <div class="mouse">
+            <div class="wheel"></div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+      <div class="container">
+        <h2 class="section-title reveal-slide"><span class="number">01.</span> About & Education</h2>
+        <div class="about-grid">
+          <div class="about-bio reveal-fade">
+            <p class="large-text">
+              I am a pre-final year BCA student at <strong>Indira Gandhi National Tribal University (IGNTU)</strong>, a Central University in Amarkantak, MP.
+            </p>
+            <p>
+              I specialize in combining modern software engineering with advanced Artificial Intelligence. From programming Binance Futures trading bots to deploying agentic AI collections systems and emergency web apps, my goal is to bridge the gap between complex algorithms and practical human-centric utilities.
+            </p>
+            <p>
+              I love building end-to-end applications, exploring LLM capabilities, designing agentic AI systems, and working on mobile applications using native Kotlin. I am always open to new learning opportunities and collaborations!
+            </p>
+            
+            <div class="bio-details">
+              <div class="detail-item"><strong>Location:</strong> Amarkantak, MP, India</div>
+              <div class="detail-item"><strong>Email:</strong> peeyushtiwari03@gmail.com</div>
+              <div class="detail-item"><strong>Languages:</strong> English (Professional), Hindi (Native)</div>
+            </div>
+          </div>
+
+          <div class="about-edu reveal-fade">
+            <h3 class="subsection-title">Education</h3>
+            <div class="education-card">
+              <div class="edu-year">2024 – 2027</div>
+              <h4 class="edu-title">Bachelor of Computer Applications (BCA)</h4>
+              <p class="edu-institution">Indira Gandhi National Tribal University (IGNTU), Amarkantak</p>
+              <p class="edu-meta">Grade: 8+ CGPA (A+) • Currently in 5th Semester (Pre-Final Year) • Computer Science</p>
+            </div>
+            
+            <div class="education-card">
+              <div class="edu-year">2022 – 2024</div>
+              <h4 class="edu-title">Class XII (Senior Secondary)</h4>
+              <p class="edu-institution">Kendriya Vidyalaya</p>
+              <p class="edu-meta">Grade: A+ • Computer Science focus</p>
+            </div> <!-- Close Class XII card -->
+          </div> <!-- Close .about-edu -->
+        </div> <!-- Close .about-grid -->
+
+          <!-- Full-width Certifications area below -->
+          <div class="certifications-wrapper reveal-fade">
+            <h3 class="subsection-title" style="justify-content: center; font-size: 1.6rem; margin-bottom: 3rem;">Certifications</h3>
+            <div class="cert-layout">
+              <div class="cert-canvas-container n8n-canvas-container">
+                <canvas id="canvas-3d-n8n"></canvas>
+              </div>
+              <ul class="cert-list">
+                <!-- Cert 1 -->
+                <li>
+                  <div class="cert-left">
+                    <span class="cert-icon">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <rect x="2" y="2" width="20" height="20" rx="6" fill="#00F59B" opacity="0.15" />
+                        <path d="M12 6v12M12 10c2-2 4-2 4-2s-1 3-4 4c-3-1-4-4-4-4s2 0 4 2z" stroke="#00F59B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
+                    </span>
+                    <div class="cert-info">
+                      <strong>Tata - GenAI Powered Data Analytics</strong>
+                      <span class="cert-issuer">Forage • Issued Jun 2026</span>
+                      <span class="cert-id">ID: Ahdq84kCEN7AE6pLQ</span>
+                    </div>
+                  </div>
+                  <a href="https://www.theforage.com/completion-certificates/ifobHAoMjQs9s6bKS/gMTdCXwDdLYoXZ3wG_ifobHAoMjQs9s6bKS_6901d9c47c3ff159e84c1d00_1780549414990_completion_certificate.pdf" target="_blank" class="cert-link-btn">
+                    <span>Show Credential</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                  </a>
+                </li>
+
+                <!-- Cert 2 -->
+                <li>
+                  <div class="cert-left">
+                    <span class="cert-icon">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <rect x="2" y="2" width="20" height="20" rx="6" fill="#FF9933" opacity="0.1" />
+                        <path d="M2 18C8 10 16 10 22 18" stroke="#0033a0" stroke-width="2" stroke-linecap="round" />
+                        <path d="M12 4L15 11L12 9L9 11L12 4Z" fill="#FF9933" />
+                        <path d="M12 9V17" stroke="#FF9933" stroke-width="1.5" stroke-dasharray="2 2" />
+                      </svg>
+                    </span>
+                    <div class="cert-info">
+                      <strong>Indian Space Research Organisation</strong>
+                      <span class="cert-issuer">ISRO • Issued Sep 2025</span>
+                      <span class="cert-id">ID: 2025H2S06BAH25-P01883</span>
+                    </div>
+                  </div>
+                  <a href="https://certificate.hack2skill.com/legacy/2025H2S06BAH25-P01883" target="_blank" class="cert-link-btn">
+                    <span>Show Credential</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                  </a>
+                </li>
+
+                <!-- Cert 3 -->
+                <li>
+                  <div class="cert-left">
+                    <span class="cert-icon">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <rect x="2" y="2" width="20" height="20" rx="6" fill="#F80000" opacity="0.1" />
+                        <ellipse cx="12" cy="12" rx="7" ry="5.5" stroke="#F80000" stroke-width="2.5" />
+                      </svg>
+                    </span>
+                    <div class="cert-info">
+                      <strong>Oracle Certification</strong>
+                      <span class="cert-issuer">Oracle • Issued Sep 2025</span>
+                      <span class="cert-id">ID: 3223446500C125AICFA</span>
+                    </div>
+                  </div>
+                  <a href="https://catalog-education.oracle.com/ords/certview/sharebadge?id=839FE14A6DCF6254B8103336243701ABBB3BB48485CDE589CA3EDA2F69F3FAAA" target="_blank" class="cert-link-btn">
+                    <span>Show Credential</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                  </a>
+                </li>
+
+                <!-- Cert 4 -->
+                <li>
+                  <div class="cert-left">
+                    <span class="cert-icon">
+                      <svg viewBox="0 0 24 24">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4" />
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853" />
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22c-.87-2.6-2.87-4.53-6.19-4.53z" fill="#FBBC05" />
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" fill="#EA4335" />
+                      </svg>
+                    </span>
+                    <div class="cert-info">
+                      <strong>Google Certifications</strong>
+                      <span class="cert-issuer">Google • Issued Sep 2025</span>
+                      <span class="cert-id">ID: 2025-505-04019</span>
+                    </div>
+                  </div>
+                  <a href="https://certificate.hack2skill.com/legacy/2025H2S06AID-I04019" target="_blank" class="cert-link-btn">
+                    <span>Show Credential</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                  </a>
+                </li>
+
+                <!-- Cert 5 -->
+                <li>
+                  <div class="cert-left">
+                    <span class="cert-icon">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <rect x="2" y="2" width="20" height="20" rx="6" fill="#CC9A6A" opacity="0.15" />
+                        <path d="M12 5L6 17h3.5l1.5-3.5h2l1.5 3.5H18L12 5zm0 5.5l.8 2h-1.6l.8-2z" fill="#CC9A6A" />
+                      </svg>
+                    </span>
+                    <div class="cert-info">
+                      <strong>Claude 101</strong>
+                      <span class="cert-issuer">Anthropic • Issued Jun 15, 2026</span>
+                      <span class="cert-id">ID: nrmgw2d2wcks</span>
+                    </div>
+                  </div>
+                  <a href="https://verify.skilljar.com/c/nrmgw2d2wcks" target="_blank" class="cert-link-btn">
+                    <span>Show Credential</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                  </a>
+                </li>
+
+                <!-- Cert 6 -->
+                <li>
+                  <div class="cert-left">
+                    <span class="cert-icon">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <rect x="2" y="2" width="20" height="20" rx="6" fill="#4285F4" opacity="0.1" />
+                        <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z" fill="#4285F4" opacity="0.15" />
+                        <path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96z" stroke="#4285F4" stroke-width="1.5" stroke-linejoin="round" />
+                        <path d="M12 9l3.5 1.75v3.5L12 16l-3.5-1.75v-3.5L12 9z" fill="#34A853" opacity="0.6" />
+                      </svg>
+                    </span>
+                    <div class="cert-info">
+                      <strong>Google Cloud Skills Boost</strong>
+                      <span class="cert-issuer">Google Cloud • Issued Jul 2025</span>
+                      <span class="cert-id">ID: 17050933</span>
+                    </div>
+                  </div>
+                  <a href="https://www.skills.google/public_profiles/40f661be-fdf9-4f58-9e6a-86f0ffe9202f/badges/17050933?utm_medium=social&utm_source=linkedin&utm_campaign=ql-social-share" target="_blank" class="cert-link-btn">
+                    <span>Show Credential</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                  </a>
+                </li>
+              </ul>
+              <div class="cert-canvas-container">
+                <canvas id="canvas-3d-certs"></canvas>
+              </div> <!-- Close .cert-canvas-container -->
+            </div> <!-- Close .cert-layout -->
+          </div> <!-- Close .certifications-wrapper -->
+        </div> <!-- Close .container -->
+      </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="experience-section">
+      <div class="container">
+        <h2 class="section-title reveal-slide"><span class="number">02.</span> Experience</h2>
+        <div class="timeline">
+          <!-- Timeline Item 1 -->
+          <div class="timeline-item reveal-fade">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2025 – 2026</div>
+            <div class="timeline-content">
+              <div class="timeline-header">
+                <h3>Python Developer Intern</h3>
+                <span class="company"><a href="https://primetrade.ai" target="_blank" class="glow-link">Primetrade.ai</a></span>
+              </div>
+              <p class="timeline-summary">Developed a fully automated Binance Futures Testnet trading bot in Python using python-binance, Typer & Rich.</p>
+              
+              <button class="expand-btn">Show Details <span>+</span></button>
+              
+              <div class="timeline-details-panel">
+                <ul class="experience-bullets">
+                  <li>Implemented real-time market data streaming, order execution, and position management via Binance API.</li>
+                  <li>Built risk management features: stop-loss, take-profit, and dynamic position sizing logic.</li>
+                  <li>Submitted complete project with documentation on GitHub as a production-ready portfolio piece.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+          <!-- Timeline Item 2 -->
+          <div class="timeline-item reveal-fade">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">2024 – 2025</div>
+            <div class="timeline-content">
+              <div class="timeline-header">
+                <h3>AI Project Lead (Self-Initiated)</h3>
+                <span class="company">Face Recognition Attendance System</span>
+              </div>
+              <p class="timeline-summary">Built an AI-driven attendance system using face detection & recognition with Python and OpenCV.</p>
+              
+              <button class="expand-btn">Show Details <span>+</span></button>
+              
+              <div class="timeline-details-panel">
+                <ul class="experience-bullets">
+                  <li>Developed real-time identification algorithms to automatically mark attendance, reducing manual errors significantly.</li>
+                  <li>Ensured secure, contactless tracking with high accuracy under varied lighting conditions.</li>
+                  <li>Implemented OpenCV preprocessing, Haar cascades, and deep learning face embeddings.</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects-section">
+      <div class="container">
+        <h2 class="section-title reveal-slide"><span class="number">03.</span> Key Projects</h2>
+        
+        <!-- Filter Tabs -->
+        <div class="project-filters reveal-fade">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="ai-ml">AI & ML</button>
+          <button class="filter-btn" data-filter="android">Android</button>
+          <button class="filter-btn" data-filter="web">Web App</button>
+          <button class="filter-btn" data-filter="automation">Automation</button>
+        </div>
+
+        <!-- Projects Grid -->
+        <div class="projects-grid">
+          <!-- Project 1: Rakshak AI -->
+          <div class="project-card reveal-fade" data-category="web ai-ml">
+            <div class="project-card-inner">
+              <div class="project-tag">Web & AI</div>
+              <h3 class="project-title">Rakshak AI</h3>
+              <p class="project-short-desc">Safety & Emergency Response Web App built with React, Vite, and Zoho Catalyst, incorporating context-aware safety assistance.</p>
+              <div class="project-tech-tags">
+                <span>React</span>
+                <span>Vite</span>
+                <span>Zoho Catalyst</span>
+                <span>Gen AI</span>
+              </div>
+              <button class="btn btn-card-details" onclick="openProjectModal('rakshak')">Read Case Study</button>
+            </div>
+          </div>
+
+          <!-- Project 2: CrimeIQ Intelligence Platform -->
+          <div class="project-card reveal-fade" data-category="ai-ml">
+            <div class="project-card-inner">
+              <div class="project-tag">Agentic AI</div>
+              <h3 class="project-title">CrimeIQ</h3>
+              <p class="project-short-desc">AI-powered conversational platform for law enforcement. Supports bilingual (Hindi/English) interaction and analytics dashboard.</p>
+              <div class="project-tech-tags">
+                <span>Agentic AI</span>
+                <span>Python</span>
+                <span>LLM API</span>
+                <span>Data Viz</span>
+              </div>
+              <button class="btn btn-card-details" onclick="openProjectModal('crimeiq')">Read Case Study</button>
+            </div>
+          </div>
+
+          <!-- Project 3: Automated AI/ML Lesson Delivery -->
+          <div class="project-card reveal-fade" data-category="automation">
+            <div class="project-card-inner">
+              <div class="project-tag">Automation</div>
+              <h3 class="project-title">AI Lesson Bot</h3>
+              <p class="project-short-desc">Fully automated lesson delivery Telegram bot powered by n8n, Gemini, and Groq APIs with automated fallback logic.</p>
+              <div class="project-tech-tags">
+                <span>n8n</span>
+                <span>Groq API</span>
+                <span>Gemini API</span>
+                <span>Telegram API</span>
+              </div>
+              <button class="btn btn-card-details" onclick="openProjectModal('telegrambot')">Read Case Study</button>
+            </div>
+          </div>
+
+          <!-- Project 4: Campus Emergency & Utility Directory -->
+          <div class="project-card reveal-fade" data-category="android">
+            <div class="project-card-inner">
+              <div class="project-tag">Android App</div>
+              <h3 class="project-title">Campus Directory</h3>
+              <p class="project-short-desc">Full-featured utility app in Kotlin using MVVM, Material Design 3, and Firebase, featuring interactive map & boards.</p>
+              <div class="project-tech-tags">
+                <span>Kotlin</span>
+                <span>MVVM</span>
+                <span>Firebase</span>
+                <span>Material Design 3</span>
+              </div>
+              <button class="btn btn-card-details" onclick="openProjectModal('campusapp')">Read Case Study</button>
+            </div>
+          </div>
+
+          <!-- Project 5: AI Collections Intelligence System -->
+          <div class="project-card reveal-fade" data-category="ai-ml">
+            <div class="project-card-inner">
+              <div class="project-tag">AI & Analytics</div>
+              <h3 class="project-title">Geldium</h3>
+              <p class="project-short-desc">Agentic AI pipeline for automated collections, utilising gradient-boosted risk models and SHAP explainability guardrails.</p>
+              <div class="project-tech-tags">
+                <span>Agentic AI</span>
+                <span>SHAP</span>
+                <span>Gradient Boosting</span>
+                <span>Explainability</span>
+              </div>
+              <button class="btn btn-card-details" onclick="openProjectModal('geldium')">Read Case Study</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Project Modal Container -->
+    <div class="modal-overlay" id="project-modal">
+      <div class="modal-card">
+        <button class="modal-close" onclick="closeProjectModal()">×</button>
+        <div id="modal-content-placeholder">
+          <!-- Dynamically populated via JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills-section">
+      <div class="container">
+        <h2 class="section-title reveal-slide"><span class="number">04.</span> Technical Skills</h2>
+        <div class="skills-grid">
+          <!-- Skill Category 1 -->
+          <div class="skill-category reveal-fade">
+            <h3 class="skill-cat-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18L22 12L16 6M8 6L2 12L8 18"/></svg>
+              Languages
+            </h3>
+            <div class="skill-tags">
+              <span class="skill-tag">Python</span>
+              <span class="skill-tag">Kotlin</span>
+              <span class="skill-tag">Java</span>
+              <span class="skill-tag">JavaScript</span>
+              <span class="skill-tag">C/C++</span>
+              <span class="skill-tag">SQL</span>
+            </div>
+          </div>
+
+          <!-- Skill Category 2 -->
+          <div class="skill-category reveal-fade">
+            <h3 class="skill-cat-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+              AI & ML
+            </h3>
+            <div class="skill-tags">
+              <span class="skill-tag">Machine Learning</span>
+              <span class="skill-tag">OpenCV</span>
+              <span class="skill-tag">Face Recognition</span>
+              <span class="skill-tag">LLM API Integration</span>
+              <span class="skill-tag">SHAP Explainability</span>
+            </div>
+          </div>
+
+          <!-- Skill Category 3 -->
+          <div class="skill-category reveal-fade">
+            <h3 class="skill-cat-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.663 17h4.673M12 3v1m6.364.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 1 1 7.072 0l-.548.547A3.374 3.374 0 0 0 14 18.469V19a2 2 0 1 1-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+              Gen AI & Tools
+            </h3>
+            <div class="skill-tags">
+              <span class="skill-tag">Gemini API</span>
+              <span class="skill-tag">Groq API</span>
+              <span class="skill-tag">n8n Workflows</span>
+              <span class="skill-tag">Agentic AI</span>
+              <span class="skill-tag">Prompt Engineering</span>
+            </div>
+          </div>
+
+          <!-- Skill Category 4 -->
+          <div class="skill-category reveal-fade">
+            <h3 class="skill-cat-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+              Android
+            </h3>
+            <div class="skill-tags">
+              <span class="skill-tag">Kotlin</span>
+              <span class="skill-tag">MVVM</span>
+              <span class="skill-tag">Material Design 3</span>
+              <span class="skill-tag">Firebase</span>
+              <span class="skill-tag">Android Studio</span>
+            </div>
+          </div>
+
+          <!-- Skill Category 5 -->
+          <div class="skill-category reveal-fade">
+            <h3 class="skill-cat-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+              Web & Deploy
+            </h3>
+            <div class="skill-tags">
+              <span class="skill-tag">React</span>
+              <span class="skill-tag">Vite</span>
+              <span class="skill-tag">Zoho Catalyst</span>
+              <span class="skill-tag">Git / GitHub</span>
+            </div>
+          </div>
+
+          <!-- Skill Category 6 -->
+          <div class="skill-category reveal-fade">
+            <h3 class="skill-cat-title">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"/></svg>
+              Data
+            </h3>
+            <div class="skill-tags">
+              <span class="skill-tag">Pandas</span>
+              <span class="skill-tag">NumPy</span>
+              <span class="skill-tag">Statistics</span>
+              <span class="skill-tag">Data Preprocessing</span>
+              <span class="skill-tag">Binance API</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+      <div class="container">
+        <h2 class="section-title reveal-slide"><span class="number">05.</span> Contact Me</h2>
+        <div class="contact-grid">
+          <div class="contact-info-panel reveal-fade">
+            <h3 class="subsection-title">Let's build something awesome</h3>
+            <p>
+              I am open to discussions regarding internship opportunities, project collaborations, or just general chats about AI, Python development, and Android apps. Feel free to reach out to me via email, phone, or github.
+            </p>
+            
+            <div class="contact-card-list">
+              <div class="contact-detail-card">
+                <div class="contact-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                </div>
+                <div class="contact-text">
+                  <span class="contact-label">Email</span>
+                  <span class="contact-value" id="copy-email">peeyushtiwari03@gmail.com</span>
+                </div>
+                <button class="btn-copy" onclick="copyToClipboard('copy-email')">Copy</button>
+              </div>
+
+              <div class="contact-detail-card">
+                <div class="contact-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                </div>
+                <div class="contact-text">
+                  <span class="contact-label">Phone</span>
+                  <span class="contact-value" id="copy-phone">+91 9202261369</span>
+                </div>
+                <button class="btn-copy" onclick="copyToClipboard('copy-phone')">Copy</button>
+              </div>
+
+              <div class="contact-detail-card">
+                <div class="contact-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                </div>
+                <div class="contact-text">
+                  <span class="contact-label">GitHub</span>
+                  <span class="contact-value"><a href="https://github.com/peeyushtiwari" target="_blank" class="glow-link">github.com/peeyushtiwari</a></span>
+                </div>
+              </div>
+
+              <div class="contact-detail-card">
+                <div class="contact-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                </div>
+                <div class="contact-text">
+                  <span class="contact-label">LinkedIn</span>
+                  <span class="contact-value"><a href="https://linkedin.com/in/peeyushtiwari18" target="_blank" class="glow-link">linkedin.com/in/peeyushtiwari18</a></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="contact-form-panel reveal-fade">
+            <form id="contact-form" onsubmit="handleContactSubmit(event)">
+              <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" required placeholder="Enter your name">
+              </div>
+              <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required placeholder="Enter your email address">
+              </div>
+              <div class="form-group">
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="5" required placeholder="Write your message here..."></textarea>
+              </div>
+              <button type="submit" class="btn btn-primary btn-submit">
+                <span>Send Message</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="submit-icon"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </button>
+            </form>
+            <div class="form-success-msg" id="form-success">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              Message sent successfully! Thank you.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-container">
+      <p>© 2026 Peeyush Tiwari. Built with Passion & Vanilla Web Stack.</p>
+      <p>Amarkantak, MP • Open to Internships & Projects</p>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="script.js"></script>
+</body>
+</html>
