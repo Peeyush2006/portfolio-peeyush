@@ -86,15 +86,15 @@ function initPortfolioApp() {
     canvas = document.getElementById('neural-canvas');
     if (canvas) {
       ctx = canvas.getContext('2d');
-      let particleCount = window.innerWidth < 768 ? 45 : 90; // Adjust density based on device width
-      const connectionDistance = 110; // Max distance to draw connecting lines
+      let particleCount = window.innerWidth < 768 ? 60 : 115; // Adjust density based on device width
+      const connectionDistance = 130; // Max distance to draw connecting lines
       
       // Track window size and adjust canvas dims
       function resizeCanvas() {
         if (!canvas) return;
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-        particleCount = window.innerWidth < 768 ? 45 : 90;
+        particleCount = window.innerWidth < 768 ? 60 : 115;
         initParticles();
       }
       
@@ -105,9 +105,9 @@ function initPortfolioApp() {
         constructor(x, y, isTrail = false) {
           this.x = x !== undefined ? x : Math.random() * canvas.width;
           this.y = y !== undefined ? y : Math.random() * canvas.height;
-          this.vx = (Math.random() - 0.5) * (isTrail ? 1.4 : 0.6);
-          this.vy = (Math.random() - 0.5) * (isTrail ? 1.4 : 0.6);
-          this.radius = isTrail ? (Math.random() * 3 + 1.5) : (Math.random() * 2 + 1);
+          this.vx = (Math.random() - 0.5) * (isTrail ? 1.4 : 0.7);
+          this.vy = (Math.random() - 0.5) * (isTrail ? 1.4 : 0.7);
+          this.radius = isTrail ? (Math.random() * 3 + 1.5) : (Math.random() * 2.5 + 1.2);
           this.isTrail = isTrail;
           this.life = 1.0;
           this.decay = 0.015 + Math.random() * 0.012; // fade speed
@@ -176,12 +176,12 @@ function initPortfolioApp() {
             
             if (dist < connectionDistance) {
               // Opacity of connection fades as distance increases
-              const opacity = (1 - dist / connectionDistance) * 0.15;
+              const opacity = (1 - dist / connectionDistance) * 0.35;
               ctx.beginPath();
               ctx.moveTo(particles[i].x, particles[i].y);
               ctx.lineTo(particles[j].x, particles[j].y);
               ctx.strokeStyle = `rgba(0, 242, 254, ${opacity})`;
-              ctx.lineWidth = 0.8;
+              ctx.lineWidth = 1.0;
               ctx.stroke();
             }
           }
@@ -190,13 +190,13 @@ function initPortfolioApp() {
           const mDx = particles[i].x - mouseX;
           const mDy = particles[i].y - mouseY;
           const mDist = Math.sqrt(mDx * mDx + mDy * mDy);
-          if (mDist < connectionDistance + 40) {
-            const mOpacity = (1 - mDist / (connectionDistance + 40)) * 0.22;
+          if (mDist < connectionDistance + 50) {
+            const mOpacity = (1 - mDist / (connectionDistance + 50)) * 0.45;
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(mouseX, mouseY);
             ctx.strokeStyle = `rgba(155, 93, 229, ${mOpacity})`; // Secondary Purple transition
-            ctx.lineWidth = 1;
+            ctx.lineWidth = 1.2;
             ctx.stroke();
           }
         }
