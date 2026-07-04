@@ -1339,6 +1339,7 @@ header.scrolled .glass-nav {
 }
 
 .id-lanyard.drop-bounce {
+  opacity: 1 !important;
   animation: lanyard-drop-interactive 1.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards !important;
 }
 
@@ -1643,11 +1644,11 @@ header.scrolled .glass-nav {
 
 /* Interactive click bounce: pulls up slightly then drops with a spring */
 @keyframes lanyard-drop-interactive {
-  0%   { transform: translateY(-30px) scale(0.98); }
-  40%  { transform: translateY(15px) scale(1.02); }
-  65%  { transform: translateY(-6px) scale(0.99); }
-  85%  { transform: translateY(2px) scale(1.01); }
-  100% { transform: translateY(0) scale(1); }
+  0%   { opacity: 1; transform: translateY(-30px) scale(0.98); }
+  40%  { opacity: 1; transform: translateY(15px) scale(1.02); }
+  65%  { opacity: 1; transform: translateY(-6px) scale(0.99); }
+  85%  { opacity: 1; transform: translateY(2px) scale(1.01); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 /* Entrance: card overshoots on the strap then settles (pendulum on drop) */
