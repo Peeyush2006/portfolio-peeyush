@@ -33,11 +33,25 @@
   <div class="loader-wrapper" id="loader">
     <div class="loader-content">
       <div class="loader-terminal">
-        <span class="terminal-prompt">$</span>
-        <span class="terminal-text" id="loader-text">initializing_portfolio_</span>
+        <div class="terminal-header-bar">
+          <div class="terminal-dots">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+          </div>
+          <div class="terminal-title">peeyush-os v1.0.0</div>
+        </div>
+        <div class="terminal-body" id="terminal-body">
+          <div class="terminal-log-line"><span class="terminal-prompt">$</span>systemctl start boot.service</div>
+          <div class="terminal-log-line"><span class="terminal-prompt">></span>Loading core system assets... <span class="status-done">[ DONE ]</span></div>
+          <div class="terminal-log-line" id="active-log"><span class="terminal-prompt">></span><span id="loader-text">initializing_portfolio_</span></div>
+        </div>
       </div>
-      <div class="loader-progress-bar">
-        <div class="loader-progress" id="loader-progress"></div>
+      <div class="loader-footer">
+        <div class="loader-progress-bar">
+          <div class="loader-progress" id="loader-progress"></div>
+        </div>
+        <div class="loader-percentage" id="loader-percentage">0%</div>
       </div>
     </div>
   </div>
@@ -95,6 +109,9 @@
             <a href="https://linkedin.com/in/peeyushtiwari18" target="_blank" aria-label="LinkedIn">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
             </a>
+            <a href="https://x.com/Peeyush69537028" target="_blank" aria-label="X (Twitter)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l6.5 8L4 20h2l5.5-6.8L16 20h4l-6.8-8.5L19.5 4H18l-5.2 6.3L8 4H4z"></path></svg>
+            </a>
             <a href="mailto:peeyushtiwari03@gmail.com" aria-label="Email">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
             </a>
@@ -105,9 +122,60 @@
         </div>
         <div class="hero-visual">
           <div class="profile-card-glow"></div>
-          
-          <!-- Unified Developer IDE Cockpit -->
-          <div class="developer-ide">
+
+          <!-- Animated Lanyard ID Card -->
+          <div class="id-lanyard" id="id-lanyard">
+            <!-- Lanyard strap -->
+            <div class="lanyard-strap">
+              <span class="strap-text">PEEYUSH · DEV · PEEYUSH · DEV ·</span>
+            </div>
+            <!-- Metal clip -->
+            <div class="lanyard-clip"></div>
+
+            <!-- Swinging card -->
+            <div class="id-card">
+              <div class="id-holo"></div>
+              <div class="id-punch-hole"></div>
+
+              <div class="id-card-header">
+                <span class="id-org">IGNTU · DEVELOPER PASS</span>
+                <span class="id-status"><span class="id-live-dot"></span>ACTIVE</span>
+              </div>
+
+              <div class="id-card-body">
+                <div class="id-photo-wrap">
+                  <span class="id-photo-fallback">PT</span>
+                  <img src="./profile.jpg" alt="Peeyush Tiwari" class="id-photo"
+                       onload="this.classList.add('loaded')"
+                       onerror="this.style.display='none'" />
+                  <span class="id-photo-ring"></span>
+                </div>
+                <div class="id-info">
+                  <h3 class="id-name">Peeyush Tiwari</h3>
+                  <span class="id-role">AI Engineer</span>
+                  <div class="id-meta">
+                    <div class="id-meta-row"><span>ROLE</span><b>AI / Python / Android</b></div>
+                    <div class="id-meta-row"><span>EDU</span><b>BCA @ IGNTU</b></div>
+                    <div class="id-meta-row"><span>ID</span><b>DEV-2027-PT18</b></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="id-skills">
+                <span>LLMs</span><span>Kotlin</span><span>OpenCV</span><span>n8n</span>
+              </div>
+
+              <div class="id-card-footer">
+                <div class="id-barcode">
+                  <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                </div>
+                <span class="id-signature">Peeyush T.</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Unified Developer IDE Cockpit (hidden, kept for reference) -->
+          <div class="developer-ide" style="display:none;">
             <!-- IDE Header -->
             <div class="ide-header">
               <div class="ide-controls">
@@ -239,6 +307,13 @@
           <div class="about-edu reveal-fade">
             <h3 class="subsection-title">Education</h3>
             <div class="education-card">
+              <div class="edu-year">2026</div>
+              <h4 class="edu-title">CS50x: Introduction to Computer Science</h4>
+              <p class="edu-institution">Harvard University</p>
+              <p class="edu-meta">Computer Science • Completed via Harvard Online (edX)</p>
+            </div>
+
+            <div class="education-card">
               <div class="edu-year">2024 – 2027</div>
               <h4 class="edu-title">Bachelor of Computer Applications (BCA)</h4>
               <p class="edu-institution">Indira Gandhi National Tribal University (IGNTU), Amarkantak</p>
@@ -258,11 +333,46 @@
           <div class="certifications-wrapper reveal-fade">
             <h3 class="subsection-title" style="justify-content: center; font-size: 1.6rem; margin-bottom: 3rem;">Certifications</h3>
             <div class="cert-layout">
-              <div class="cert-canvas-container n8n-canvas-container">
-                <canvas id="canvas-3d-n8n"></canvas>
+              <!-- Playgrounds Grid -->
+              <div class="cert-playgrounds">
+                <div class="playground-card">
+                  <span class="playground-title">n8n Workflow Simulation</span>
+                  <div class="cert-canvas-container">
+                    <canvas id="canvas-3d-n8n"></canvas>
+                  </div>
+                </div>
+                <div class="playground-card">
+                  <span class="playground-title">Credentials 3D Physics Sphere</span>
+                  <div class="cert-canvas-container">
+                    <canvas id="canvas-3d-certs"></canvas>
+                  </div>
+                </div>
               </div>
+
+              <!-- Certifications Grid -->
               <ul class="cert-list">
-                <!-- Cert 1 -->
+                <!-- Cert 1: Harvard CS50 -->
+                <li>
+                  <div class="cert-left">
+                    <span class="cert-icon">
+                      <svg viewBox="0 0 24 24" fill="none">
+                        <rect x="2" y="2" width="20" height="20" rx="6" fill="#A51C30" opacity="0.15" />
+                        <image x="5" y="5" width="14" height="14" href="https://upload.wikimedia.org/wikipedia/commons/c/cc/Harvard_University_coat_of_arms.svg" xlink:href="https://upload.wikimedia.org/wikipedia/commons/c/cc/Harvard_University_coat_of_arms.svg" />
+                      </svg>
+                    </span>
+                    <div class="cert-info">
+                      <strong>CS50x: Introduction to Computer Science</strong>
+                      <span class="cert-issuer">Harvard University • Issued 2026</span>
+                      <span class="cert-id">ID: b92ec64d-2f38-4724-90d6-f5b7c2745e31</span>
+                    </div>
+                  </div>
+                  <a href="https://cs50.harvard.edu/certificates/b92ec64d-2f38-4724-90d6-f5b7c2745e31" target="_blank" class="cert-link-btn">
+                    <span>Show Credential</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+                  </a>
+                </li>
+
+                <!-- Cert 2 -->
                 <li>
                   <div class="cert-left">
                     <span class="cert-icon">
@@ -283,7 +393,7 @@
                   </a>
                 </li>
 
-                <!-- Cert 2 -->
+                <!-- Cert 3 -->
                 <li>
                   <div class="cert-left">
                     <span class="cert-icon">
@@ -306,7 +416,7 @@
                   </a>
                 </li>
 
-                <!-- Cert 3 -->
+                <!-- Cert 4 -->
                 <li>
                   <div class="cert-left">
                     <span class="cert-icon">
@@ -327,7 +437,7 @@
                   </a>
                 </li>
 
-                <!-- Cert 4 -->
+                <!-- Cert 5 -->
                 <li>
                   <div class="cert-left">
                     <span class="cert-icon">
@@ -350,7 +460,7 @@
                   </a>
                 </li>
 
-                <!-- Cert 5 -->
+                <!-- Cert 6 -->
                 <li>
                   <div class="cert-left">
                     <span class="cert-icon">
@@ -371,7 +481,7 @@
                   </a>
                 </li>
 
-                <!-- Cert 6 -->
+                <!-- Cert 7 -->
                 <li>
                   <div class="cert-left">
                     <span class="cert-icon">
@@ -394,37 +504,34 @@
                   </a>
                 </li>
               </ul>
-              <div class="cert-canvas-container">
-                <canvas id="canvas-3d-certs"></canvas>
-              </div> <!-- Close .cert-canvas-container -->
             </div> <!-- Close .cert-layout -->
           </div> <!-- Close .certifications-wrapper -->
         </div> <!-- Close .container -->
-      </section>
+      </section> <!-- Close #about -->
 
-    <!-- Experience Section -->
-    <section id="experience" class="experience-section">
+      <!-- Experience Section -->
+      <section id="experience" class="experience-section">
       <div class="container">
         <h2 class="section-title reveal-slide"><span class="number">02.</span> Experience</h2>
         <div class="timeline">
           <!-- Timeline Item 1 -->
           <div class="timeline-item reveal-fade">
             <div class="timeline-dot"></div>
-            <div class="timeline-date">2025 – 2026</div>
+            <div class="timeline-date">Jul 2026 – Aug 2026</div>
             <div class="timeline-content">
               <div class="timeline-header">
-                <h3>Python Developer Intern</h3>
-                <span class="company"><a href="https://primetrade.ai" target="_blank" class="glow-link">Primetrade.ai</a></span>
+                <h3>AI/ML Intern</h3>
+                <span class="company"><a href="https://flyrank.ai" target="_blank" class="glow-link">FlyRank</a></span>
               </div>
-              <p class="timeline-summary">Developed a fully automated Binance Futures Testnet trading bot in Python using python-binance, Typer & Rich.</p>
+              <p class="timeline-summary">Developed production AI systems focused on applied machine learning, semantic embeddings, and clustering algorithms.</p>
               
               <button class="expand-btn">Show Details <span>+</span></button>
               
               <div class="timeline-details-panel">
                 <ul class="experience-bullets">
-                  <li>Implemented real-time market data streaming, order execution, and position management via Binance API.</li>
-                  <li>Built risk management features: stop-loss, take-profit, and dynamic position sizing logic.</li>
-                  <li>Submitted complete project with documentation on GitHub as a production-ready portfolio piece.</li>
+                  <li>Implemented semantic search, intent classification, and opportunity scoring models using Python.</li>
+                  <li>Built high-throughput text processing pipelines using embedding vectors and clustering to scale content relevance.</li>
+                  <li>Collaborated on automated organic growth features and localization logic to optimize SEO platforms.</li>
                 </ul>
               </div>
             </div>
@@ -441,7 +548,10 @@
               </div>
               <p class="timeline-summary">Built an AI-driven attendance system using face detection & recognition with Python and OpenCV.</p>
               
-              <button class="expand-btn">Show Details <span>+</span></button>
+              <div class="timeline-actions">
+                <button class="expand-btn">Show Details <span>+</span></button>
+                <a href="https://ai-face-attendance-zs8r.onrender.com/" target="_blank" class="btn btn-live-demo">View Live <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg></a>
+              </div>
               
               <div class="timeline-details-panel">
                 <ul class="experience-bullets">
@@ -714,6 +824,16 @@
                 <div class="contact-text">
                   <span class="contact-label">LinkedIn</span>
                   <span class="contact-value"><a href="https://linkedin.com/in/peeyushtiwari18" target="_blank" class="glow-link">linkedin.com/in/peeyushtiwari18</a></span>
+                </div>
+              </div>
+
+              <div class="contact-detail-card">
+                <div class="contact-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4l6.5 8L4 20h2l5.5-6.8L16 20h4l-6.8-8.5L19.5 4H18l-5.2 6.3L8 4H4z"></path></svg>
+                </div>
+                <div class="contact-text">
+                  <span class="contact-label">X (Twitter)</span>
+                  <span class="contact-value"><a href="https://x.com/Peeyush69537028" target="_blank" class="glow-link">x.com/Peeyush69537028</a></span>
                 </div>
               </div>
             </div>

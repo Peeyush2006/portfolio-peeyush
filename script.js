@@ -3,247 +3,341 @@
    Typewriter, Filterable Modals, and Scroll Reveals
    ========================================================================== */
 
-document.addEventListener('DOMContentLoaded', () => {
+function initPortfolioApp() {
 
   // ==========================================
-  // 1. Custom Cursor Trailing & Easing
+  // 1. Custom Cursor Trailing & Easing (Null-Safe)
   // ==========================================
-  const cursor = document.getElementById('custom-cursor');
-  const cursorDot = document.getElementById('custom-cursor-dot');
-  
-  let mouseX = 0, mouseY = 0;     // Current mouse coordinates
-  let cursorX = 0, cursorY = 0;   // Lagged cursor ring coordinates
-  const ease = 0.12;              // Easing amount for trailing ring (smaller = more lag)
-  
-  // Track mouse movements
-  let lastSpawnTime = 0;
-  document.addEventListener('mousemove', (e) => {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
+  try {
+    const cursor = document.getElementById('custom-cursor');
+    const cursorDot = document.getElementById('custom-cursor-dot');
     
-    // Instantly position the center dot
-    if (cursorDot) {
-      cursorDot.style.left = `${mouseX}px`;
-      cursorDot.style.top = `${mouseY}px`;
+    let mouseX = 0, mouseY = 0;     // Current mouse coordinates
+    let cursorX = 0, cursorY = 0;   // Lagged cursor ring coordinates
+    const ease = 0.12;              // Easing amount for trailing ring (smaller = more lag)
+    
+    // Track mouse movements
+    let lastSpawnTime = 0;
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      
+      // Instantly position the center dot
+      if (cursorDot) {
+        cursorDot.style.left = `${mouseX}px`;
+        cursorDot.style.top = `${mouseY}px`;
+      }
+
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+      // Spawn magic trail particle on background canvas
+      const now = Date.now();
+      if (now - lastSpawnTime > 25 && typeof particles !== 'undefined' && Array.isArray(particles)) {
+        particles.push(new Particle(mouseX, mouseY, true));
+        lastSpawnTime = now;
+      }
+    });
+
+    // Animate the lagged outer cursor ring
+    function animateCursor() {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        if (cursor) cursor.style.display = 'none';
+        if (cursorDot) cursorDot.style.display = 'none';
+        return;
+      }
+      // Easing formula: position += (target - position) * ease
+      cursorX += (mouseX - cursorX) * ease;
+      cursorY += (mouseY - cursorY) * ease;
+      
+      if (cursor) {
+        cursor.style.left = `${cursorX}px`;
+        cursor.style.top = `${cursorY}px`;
+      }
+      
+      requestAnimationFrame(animateCursor);
+    }
+    if (cursor || cursorDot) {
+      animateCursor();
     }
 
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    // Spawn magic trail particle on background canvas
-    const now = Date.now();
-    if (now - lastSpawnTime > 25 && typeof particles !== 'undefined') {
-      particles.push(new Particle(mouseX, mouseY, true));
-      lastSpawnTime = now;
+    // Add hover effect states for all interactive elements
+    if (cursor) {
+      const hoverables = document.querySelectorAll('a, button, .filter-btn, .project-card, .education-card, input, textarea');
+      hoverables.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          if (cursor) cursor.classList.add('hover');
+        });
+        el.addEventListener('mouseleave', () => {
+          if (cursor) cursor.classList.remove('hover');
+        });
+      });
     }
-  });
-
-  // Animate the lagged outer cursor ring
-  function animateCursor() {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      if (cursor) cursor.style.display = 'none';
-      if (cursorDot) cursorDot.style.display = 'none';
-      return;
-    }
-    // Easing formula: position += (target - position) * ease
-    cursorX += (mouseX - cursorX) * ease;
-    cursorY += (mouseY - cursorY) * ease;
-    
-    cursor.style.left = `${cursorX}px`;
-    cursor.style.top = `${cursorY}px`;
-    
-    requestAnimationFrame(animateCursor);
+  } catch (err) {
+    console.error('Cursor initialization error:', err);
   }
-  animateCursor();
-
-  // Add hover effect states for all interactive elements
-  const hoverables = document.querySelectorAll('a, button, .filter-btn, .project-card, .education-card, input, textarea');
-  hoverables.forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cursor.classList.add('hover');
-    });
-    el.addEventListener('mouseleave', () => {
-      cursor.classList.remove('hover');
-    });
-  });
 
 
   // ==========================================
-  // 2. Interactive Neural Particle Canvas
+  // 2. Interactive Neural Particle Canvas (Null-Safe)
   // ==========================================
-  const canvas = document.getElementById('neural-canvas');
-  const ctx = canvas.getContext('2d');
-  
   let particles = [];
-  let particleCount = window.innerWidth < 768 ? 45 : 90; // Adjust density based on device width
-  const connectionDistance = 110; // Max distance to draw connecting lines
-  
-  // Track window size and adjust canvas dims
-  function resizeCanvas() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    particleCount = window.innerWidth < 768 ? 45 : 90;
-    initParticles();
-  }
-  
-  window.addEventListener('resize', resizeCanvas);
-  
-  // Particle constructor
-  class Particle {
-    constructor(x, y, isTrail = false) {
-      this.x = x !== undefined ? x : Math.random() * canvas.width;
-      this.y = y !== undefined ? y : Math.random() * canvas.height;
-      this.vx = (Math.random() - 0.5) * (isTrail ? 1.4 : 0.6);
-      this.vy = (Math.random() - 0.5) * (isTrail ? 1.4 : 0.6);
-      this.radius = isTrail ? (Math.random() * 3 + 1.5) : (Math.random() * 2 + 1);
-      this.isTrail = isTrail;
-      this.life = 1.0;
-      this.decay = 0.015 + Math.random() * 0.012; // fade speed
-      this.color = isTrail ? (Math.random() > 0.5 ? 'rgba(155, 93, 229,' : 'rgba(0, 242, 254,') : 'rgba(0, 242, 254,';
-    }
-    
-    update() {
-      this.x += this.vx;
-      this.y += this.vy;
+  let canvas, ctx;
+  try {
+    canvas = document.getElementById('neural-canvas');
+    if (canvas) {
+      ctx = canvas.getContext('2d');
+      let particleCount = window.innerWidth < 768 ? 45 : 90; // Adjust density based on device width
+      const connectionDistance = 110; // Max distance to draw connecting lines
       
-      if (this.isTrail) {
-        this.life -= this.decay;
-        this.radius = Math.max(0.1, this.radius - 0.03);
-      } else {
-        // Bounce off borders
-        if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
-        if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+      // Track window size and adjust canvas dims
+      function resizeCanvas() {
+        if (!canvas) return;
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        particleCount = window.innerWidth < 768 ? 45 : 90;
+        initParticles();
       }
-    }
-    
-    draw() {
-      if (this.isTrail && this.life <= 0) return;
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      if (this.isTrail) {
-        ctx.fillStyle = `${this.color} ${this.life * 0.65})`;
-      } else {
-        ctx.fillStyle = 'rgba(0, 242, 254, 0.45)'; // Electric Teal glow
-      }
-      ctx.fill();
-    }
-  }
-  
-  function initParticles() {
-    particles = [];
-    for (let i = 0; i < particleCount; i++) {
-      particles.push(new Particle());
-    }
-  }
-  
-  function animateParticles() {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      return;
-    }
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // Filter out dead trail particles
-    particles = particles.filter(p => !p.isTrail || p.life > 0);
-    
-    // Draw connections and update particles
-    for (let i = 0; i < particles.length; i++) {
-      particles[i].update();
-      particles[i].draw();
       
-      // Skip connection lines for trail particles to keep it clean
-      if (particles[i].isTrail) continue;
+      window.addEventListener('resize', resizeCanvas);
       
-      // Look forward to connect particles
-      for (let j = i + 1; j < particles.length; j++) {
-        if (particles[j].isTrail) continue;
-        const dx = particles[i].x - particles[j].x;
-        const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+      // Particle constructor
+      window.Particle = class Particle {
+        constructor(x, y, isTrail = false) {
+          this.x = x !== undefined ? x : Math.random() * canvas.width;
+          this.y = y !== undefined ? y : Math.random() * canvas.height;
+          this.vx = (Math.random() - 0.5) * (isTrail ? 1.4 : 0.6);
+          this.vy = (Math.random() - 0.5) * (isTrail ? 1.4 : 0.6);
+          this.radius = isTrail ? (Math.random() * 3 + 1.5) : (Math.random() * 2 + 1);
+          this.isTrail = isTrail;
+          this.life = 1.0;
+          this.decay = 0.015 + Math.random() * 0.012; // fade speed
+          this.color = isTrail ? (Math.random() > 0.5 ? 'rgba(155, 93, 229,' : 'rgba(0, 242, 254,') : 'rgba(0, 242, 254,';
+        }
         
-        if (dist < connectionDistance) {
-          // Opacity of connection fades as distance increases
-          const opacity = (1 - dist / connectionDistance) * 0.15;
+        update() {
+          this.x += this.vx;
+          this.y += this.vy;
+          
+          if (this.isTrail) {
+            this.life -= this.decay;
+            this.radius = Math.max(0.1, this.radius - 0.03);
+          } else if (canvas) {
+            // Bounce off borders
+            if (this.x < 0 || this.x > canvas.width) this.vx = -this.vx;
+            if (this.y < 0 || this.y > canvas.height) this.vy = -this.vy;
+          }
+        }
+        
+        draw() {
+          if (!ctx || (this.isTrail && this.life <= 0)) return;
           ctx.beginPath();
-          ctx.moveTo(particles[i].x, particles[i].y);
-          ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(0, 242, 254, ${opacity})`;
-          ctx.lineWidth = 0.8;
-          ctx.stroke();
+          ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+          if (this.isTrail) {
+            ctx.fillStyle = `${this.color} ${this.life * 0.65})`;
+          } else {
+            ctx.fillStyle = 'rgba(0, 242, 254, 0.45)'; // Electric Teal glow
+          }
+          ctx.fill();
+        }
+      };
+      
+      function initParticles() {
+        particles = [];
+        for (let i = 0; i < particleCount; i++) {
+          particles.push(new window.Particle());
         }
       }
       
-      // Connect to mouse if close enough
-      const mDx = particles[i].x - mouseX;
-      const mDy = particles[i].y - mouseY;
-      const mDist = Math.sqrt(mDx * mDx + mDy * mDy);
-      if (mDist < connectionDistance + 40) {
-        const mOpacity = (1 - mDist / (connectionDistance + 40)) * 0.22;
-        ctx.beginPath();
-        ctx.moveTo(particles[i].x, particles[i].y);
-        ctx.lineTo(mouseX, mouseY);
-        ctx.strokeStyle = `rgba(155, 93, 229, ${mOpacity})`; // Secondary Purple transition
-        ctx.lineWidth = 1;
-        ctx.stroke();
+      function animateParticles() {
+        if (!canvas || !ctx) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          return;
+        }
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // Filter out dead trail particles
+        particles = particles.filter(p => !p.isTrail || p.life > 0);
+        
+        // Draw connections and update particles
+        for (let i = 0; i < particles.length; i++) {
+          particles[i].update();
+          particles[i].draw();
+          
+          // Skip connection lines for trail particles to keep it clean
+          if (particles[i].isTrail) continue;
+          
+          // Look forward to connect particles
+          for (let j = i + 1; j < particles.length; j++) {
+            if (particles[j].isTrail) continue;
+            const dx = particles[i].x - particles[j].x;
+            const dy = particles[i].y - particles[j].y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            
+            if (dist < connectionDistance) {
+              // Opacity of connection fades as distance increases
+              const opacity = (1 - dist / connectionDistance) * 0.15;
+              ctx.beginPath();
+              ctx.moveTo(particles[i].x, particles[i].y);
+              ctx.lineTo(particles[j].x, particles[j].y);
+              ctx.strokeStyle = `rgba(0, 242, 254, ${opacity})`;
+              ctx.lineWidth = 0.8;
+              ctx.stroke();
+            }
+          }
+          
+          // Connect to mouse if close enough
+          const mDx = particles[i].x - mouseX;
+          const mDy = particles[i].y - mouseY;
+          const mDist = Math.sqrt(mDx * mDx + mDy * mDy);
+          if (mDist < connectionDistance + 40) {
+            const mOpacity = (1 - mDist / (connectionDistance + 40)) * 0.22;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(mouseX, mouseY);
+            ctx.strokeStyle = `rgba(155, 93, 229, ${mOpacity})`; // Secondary Purple transition
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+        
+        requestAnimationFrame(animateParticles);
       }
+      
+      // Set dimensions and initialize
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      initParticles();
+      animateParticles();
     }
-    
-    requestAnimationFrame(animateParticles);
+  } catch (err) {
+    console.error('Neural canvas initialization error:', err);
   }
-  
-  // Set dimensions and initialize
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-  initParticles();
-  animateParticles();
 
 
   // ==========================================
-  // 3. Simulated Terminal Portfolio Loader
+  // 3. Simulated Terminal Portfolio Loader (Ultra-Robust & Self-Healing)
   // ==========================================
-  const loader = document.getElementById('loader');
-  const loaderText = document.getElementById('loader-text');
-  const loaderProgress = document.getElementById('loader-progress');
-  
-  const terminalMessages = [
-    'initializing_portfolio_',
-    'fetching_resume_data_.... [DONE]',
-    'loading_technical_skills_... [DONE]',
-    'initializing_agentic_ai_workflows_... [DONE]',
-    'compiling_styles_and_shaders_... [DONE]',
-    'portfolio_ready_...'
-  ];
-  
-  let currentMsgIndex = 0;
-  let progressVal = 0;
-  
-  function runLoader() {
-    const interval = setInterval(() => {
-      progressVal += Math.random() * 8 + 4;
+  try {
+    (function() {
+      const loader = document.getElementById('loader');
+      const loaderProgress = document.getElementById('loader-progress');
+      const loaderPercentage = document.getElementById('loader-percentage');
+      const terminalBody = document.getElementById('terminal-body');
       
-      if (progressVal >= 100) {
-        progressVal = 100;
-        loaderProgress.style.width = '100%';
-        loaderText.textContent = terminalMessages[terminalMessages.length - 1];
-        clearInterval(interval);
-        
-        // Let loader linger briefly then slide up
-        setTimeout(() => {
-          loader.classList.add('loaded');
-        }, 500);
-      } else {
-        loaderProgress.style.width = `${progressVal}%`;
-        
-        // Rotate messages based on progress thresholds
-        const step = 100 / (terminalMessages.length - 1);
-        const nextMsgIndex = Math.floor(progressVal / step);
-        if (nextMsgIndex !== currentMsgIndex && nextMsgIndex < terminalMessages.length - 1) {
-          currentMsgIndex = nextMsgIndex;
-          loaderText.textContent = terminalMessages[currentMsgIndex];
+      if (!loader || !loaderProgress || !loaderPercentage || !terminalBody) return;
+
+      const logs = [
+        { text: 'Fetching core developer dossiers... ', status: 'OK' },
+        { text: 'Indexing tech skills: Python, AI/ML, OpenCV... ', status: 'OK' },
+        { text: 'Initializing neural network parameters... ', status: 'OK' },
+        { text: 'Loading 3D viewport canvas & shaders... ', status: 'OK' },
+        { text: 'Compiling responsive layouts & variables... ', status: 'OK' },
+        { text: 'Establishing secure agentic handshakes... ', status: 'OK' }
+      ];
+
+      let progress = 0;
+      let logIndex = 0;
+
+      function appendLog(text, status) {
+        // Remove id from the previous active text element so it stops animating/updating
+        const activeLine = document.getElementById('active-log');
+        if (activeLine) {
+          activeLine.removeAttribute('id');
+          const activeText = activeLine.querySelector('span:not(.terminal-prompt)');
+          if (activeText) {
+            activeText.removeAttribute('id');
+            // Strip cursor from completed log text
+            activeText.textContent = text;
+          }
+          // Append the [ OK ] status
+          const statusSpan = document.createElement('span');
+          statusSpan.className = 'status-done';
+          statusSpan.textContent = `[ ${status} ]`;
+          activeLine.appendChild(statusSpan);
         }
+
+        // Re-add active log line if we are not done
+        if (logIndex < logs.length) {
+          const nextActive = document.createElement('div');
+          nextActive.id = 'active-log';
+          nextActive.className = 'terminal-log-line';
+          nextActive.innerHTML = `<span class="terminal-prompt">></span><span id="loader-text"></span>`;
+          terminalBody.appendChild(nextActive);
+        }
+
+        // Scroll to bottom
+        terminalBody.scrollTop = terminalBody.scrollHeight;
       }
-    }, 75);
+
+      function updateLoader() {
+        const interval = setInterval(() => {
+          try {
+            // Increase progress smoothly
+            progress += Math.random() * 3.5 + 2.0;
+            
+            if (progress >= 100) {
+              progress = 100;
+              loaderProgress.style.width = '100%';
+              loaderPercentage.textContent = '100%';
+              clearInterval(interval);
+
+              // Complete the final log step and trigger close
+              appendLog(logs[logs.length - 1].text, 'OK');
+
+              // Append final system boot success line
+              const finalLine = document.createElement('div');
+              finalLine.className = 'terminal-log-line';
+              finalLine.innerHTML = `<span class="terminal-prompt">$</span>boot_sequence_complete --success`;
+              terminalBody.appendChild(finalLine);
+              terminalBody.scrollTop = terminalBody.scrollHeight;
+
+              // Add loaded class to slide out
+              setTimeout(() => {
+                if (loader) loader.classList.add('loaded');
+              }, 500);
+            } else {
+              loaderProgress.style.width = `${progress}%`;
+              loaderPercentage.textContent = `${Math.floor(progress)}%`;
+
+              // Check if we should output the next completed log line
+              const threshold = (100 / logs.length) * (logIndex + 1);
+              if (progress >= threshold && logIndex < logs.length - 1) {
+                appendLog(logs[logIndex].text, logs[logIndex].status);
+                logIndex++;
+              } else {
+                // Keep typing effect cursor active on current log line
+                const activeText = document.getElementById('loader-text');
+                if (activeText && logIndex < logs.length) {
+                  const currentLog = logs[logIndex];
+                  const totalChars = currentLog.text.length;
+                  
+                  // Calculate how far we are into the current step
+                  const stepStart = (100 / logs.length) * logIndex;
+                  const stepEnd = (100 / logs.length) * (logIndex + 1);
+                  const percentOfStep = (progress - stepStart) / (stepEnd - stepStart);
+                  
+                  const charsToShow = Math.floor(totalChars * Math.min(1, percentOfStep * 1.6));
+                  activeText.textContent = currentLog.text.slice(0, charsToShow) + '_';
+                }
+              }
+            }
+          } catch (intervalErr) {
+            console.error('Error inside loader interval:', intervalErr);
+            clearInterval(interval);
+            if (loader) loader.classList.add('loaded');
+          }
+        }, 35);
+      }
+
+      updateLoader();
+    })();
+  } catch (err) {
+    console.error('Loader initialization error:', err);
+    const loaderEl = document.getElementById('loader');
+    if (loaderEl) loaderEl.classList.add('loaded');
   }
-  runLoader();
+
 
 
   // ==========================================
@@ -748,7 +842,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }, 1500);
   }
 
-});
+  // Interactive ID Card Drop/Bounce on Click
+  const lanyardEl = document.getElementById('id-lanyard');
+  if (lanyardEl) {
+    lanyardEl.addEventListener('click', () => {
+      // Remove the class, force a reflow, and add it back to trigger the animation again
+      lanyardEl.classList.remove('drop-bounce');
+      void lanyardEl.offsetWidth; 
+      lanyardEl.classList.add('drop-bounce');
+    });
+  }
+
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initPortfolioApp);
+} else {
+  initPortfolioApp();
+}
 
 
 // ==========================================
@@ -1178,7 +1289,36 @@ function handleContactSubmit(e) {
       ctx.fill();
     };
 
+    const drawHarvard = (ctx) => {
+      ctx.translate(128, 110);
+      
+      // Draw shield background
+      ctx.fillStyle = '#A51C30';
+      ctx.beginPath();
+      ctx.moveTo(-40, -45);
+      ctx.lineTo(40, -45);
+      ctx.lineTo(40, 10);
+      ctx.quadraticCurveTo(40, 45, 0, 55);
+      ctx.quadraticCurveTo(-40, 45, -40, 10);
+      ctx.closePath();
+      ctx.fill();
+      
+      // Draw 'H' in white
+      ctx.strokeStyle = '#ffffff';
+      ctx.lineWidth = 12;
+      ctx.lineCap = 'square';
+      ctx.beginPath();
+      ctx.moveTo(-16, -20);
+      ctx.lineTo(-16, 20);
+      ctx.moveTo(16, -20);
+      ctx.lineTo(16, 20);
+      ctx.moveTo(-16, 0);
+      ctx.lineTo(16, 0);
+      ctx.stroke();
+    };
+
     const companies = [
+      { name: 'Harvard', draw: drawHarvard },
       { name: 'Forage', draw: drawForage },
       { name: 'ISRO', draw: drawIsro },
       { name: 'Oracle', draw: drawOracle },
@@ -1190,6 +1330,7 @@ function handleContactSubmit(e) {
     // 4. Create glossy company sphere meshes
     const spheres = [];
     const sphereRadius = 0.95;
+    const boundaryRadius = 2.15; // invisible spherical cage matching the visible viewport bounds
     const spheresGroup = new THREE.Group();
     scene.add(spheresGroup);
 
@@ -1198,92 +1339,208 @@ function handleContactSubmit(e) {
       const material = new THREE.MeshStandardMaterial({
         map: texture,
         roughness: 0.12,
-        metalness: 0.08
+        metalness: 0.08,
+        emissive: new THREE.Color(0x000000)
       });
 
       const geometry = new THREE.SphereGeometry(sphereRadius, 64, 64);
       const mesh = new THREE.Mesh(geometry, material);
 
-      // Position loosely in a circle
+      // Distribute evenly on a ring within boundary, add slight depth spread
       const angle = (idx / companies.length) * Math.PI * 2;
       mesh.position.set(
-        Math.cos(angle) * 1.8,
-        Math.sin(angle) * 1.8,
-        (Math.random() - 0.5) * 1.2
+        Math.cos(angle) * 1.25,
+        Math.sin(angle) * 1.25,
+        (Math.random() - 0.5) * 0.6
       );
 
+      // Give each ball a tangential (orbital) kick so the cluster keeps swirling
+      const tangential = new THREE.Vector3(-Math.sin(angle), Math.cos(angle), 0)
+        .multiplyScalar(0.02 + Math.random() * 0.01);
+
       mesh.userData = {
-        velocity: new THREE.Vector3(
-          (Math.random() - 0.5) * 0.015,
-          (Math.random() - 0.5) * 0.015,
-          (Math.random() - 0.5) * 0.015
-        ),
+        velocity: tangential.add(new THREE.Vector3(
+          (Math.random() - 0.5) * 0.01,
+          (Math.random() - 0.5) * 0.01,
+          (Math.random() - 0.5) * 0.02
+        )),
         targetScale: 1.0,
+        baseScale: 1.0,
+        scaleImpulse: 1.0,             // elastic squish impulse factor
+        glow: 0,                       // eased emissive intensity
         spinSpeed: new THREE.Vector3(
-          (Math.random() - 0.5) * 0.008,
-          (Math.random() - 0.5) * 0.008 + 0.004,
+          (Math.random() - 0.5) * 0.01,
+          (Math.random() - 0.5) * 0.01 + 0.005,
           0
-        )
+        ),
+        entranceDelay: idx * 6,        // frames before this ball pops in
+        entrance: 0                    // 0 -> 1 grow-in progress
       };
+
+      // Start invisible; grows in during the entrance
+      mesh.scale.setScalar(0.001);
 
       spheresGroup.add(mesh);
       spheres.push(mesh);
     });
 
+    // Track elapsed frames for the staggered entrance + cursor interaction state
+    let frameCount = 0;
+    const pointer3D = new THREE.Vector3(); // cursor projected into the scene plane
+    let pointerActive = false;
+
     // 5. Physics and Collision update logic
     function updatePhysics() {
-      const gravity = 0.0003;
-      const repulsion = 0.0015;
-      const minDistance = 2.0; // sphereDiameter + buffer
+      frameCount++;
+
+      const gravity = 0.00025;     // gentle pull toward center
+      const swirl = 0.00014;       // tangential force -> perpetual orbital drift
+      const minDistance = 2.0;     // sphereDiameter + buffer
+      const restitution = 0.65;    // bounciness of collisions
+      const cursorRadius = 2.3;    // interactive cursor sphere radius
+      const cursorForce = 0.028;
+
+      // Transform world pointer to spheresGroup local coordinates for accurate cursor interaction
+      const localPointer = pointer3D.clone();
+      spheresGroup.worldToLocal(localPointer);
+
+      const time = Date.now() * 0.001; // used for zero-g floating wave drift
 
       for (let i = 0; i < spheres.length; i++) {
         const s1 = spheres[i];
-        
-        // Gravity force towards center
-        s1.userData.velocity.x -= s1.position.x * gravity;
-        s1.userData.velocity.y -= s1.position.y * gravity;
-        s1.userData.velocity.z -= s1.position.z * gravity;
+        const v1 = s1.userData.velocity;
 
-        // Collision repulsion check against all other spheres
-        for (let j = i + 1; j < spheres.length; j++) {
-          const s2 = spheres[j];
-          
-          const dx = s1.position.x - s2.position.x;
-          const dy = s1.position.y - s2.position.y;
-          const dz = s1.position.z - s2.position.z;
+        // Staggered entrance grow-in
+        if (frameCount > s1.userData.entranceDelay && s1.userData.entrance < 1) {
+          s1.userData.entrance = Math.min(1, s1.userData.entrance + 0.035);
+        }
+
+        // Gravity toward center (pulls back in XYZ)
+        v1.x -= s1.position.x * gravity;
+        v1.y -= s1.position.y * gravity;
+        v1.z -= s1.position.z * gravity * 1.5;
+
+        // Swirl: tangential orbital force in XY plane
+        v1.x += -s1.position.y * swirl;
+        v1.y += s1.position.x * swirl;
+
+        // Gentle Zero-G Floating Drift (prevents static clumping / looks organic)
+        v1.x += Math.sin(time * 0.6 + i * 1.7) * 0.00025;
+        v1.y += Math.cos(time * 0.5 + i * 2.3) * 0.00025;
+        v1.z += Math.sin(time * 0.7 + i * 3.1) * 0.0003;
+
+        // Cursor repulsion — pushes balls scatter away from projected pointer in 3D
+        if (pointerActive) {
+          const dx = s1.position.x - localPointer.x;
+          const dy = s1.position.y - localPointer.y;
+          const dz = s1.position.z - localPointer.z;
           const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
-          if (dist < minDistance && dist > 0.01) {
-            const overlap = minDistance - dist;
-            // Push direction vector
-            const pushX = (dx / dist) * overlap * repulsion;
-            const pushY = (dy / dist) * overlap * repulsion;
-            const pushZ = (dz / dist) * overlap * repulsion;
-
-            s1.userData.velocity.x += pushX;
-            s1.userData.velocity.y += pushY;
-            s1.userData.velocity.z += pushZ;
-
-            s2.userData.velocity.x -= pushX;
-            s2.userData.velocity.y -= pushY;
-            s2.userData.velocity.z -= pushZ;
+          if (dist < cursorRadius && dist > 0.001) {
+            const push = (1 - dist / cursorRadius) * cursorForce;
+            v1.x += (dx / dist) * push;
+            v1.y += (dy / dist) * push;
+            v1.z += (dz / dist) * push * 0.5; // slight Z displacement
           }
         }
 
-        // Friction damping
-        s1.userData.velocity.multiplyScalar(0.975);
+        // Ball-to-ball collisions: positional correction + momentum exchange
+        for (let j = i + 1; j < spheres.length; j++) {
+          const s2 = spheres[j];
+          const v2 = s2.userData.velocity;
 
-        // Apply velocities to update positions
-        s1.position.add(s1.userData.velocity);
+          const dx = s1.position.x - s2.position.x;
+          const dy = s1.position.y - s2.position.y;
+          const dz = s1.position.z - s2.position.z;
+          let dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+          if (dist < 0.001) dist = 0.001;
 
-        // Auto spin meshes on axes
+          if (dist < minDistance) {
+            const nx = dx / dist, ny = dy / dist, nz = dz / dist;
+
+            // Smooth positional correction to avoid clumping jitter
+            const overlap = minDistance - dist;
+            const percent = 0.55; // resolve portion of penetration per frame
+            const slop = 0.005;  // penetration allowance
+            const correction = (Math.max(overlap - slop, 0) / dist) * percent * 0.5;
+            
+            const cx = dx * correction;
+            const cy = dy * correction;
+            const cz = dz * correction;
+            
+            s1.position.x += cx; s1.position.y += cy; s1.position.z += cz;
+            s2.position.x -= cx; s2.position.y -= cy; s2.position.z -= cz;
+
+            // Relative velocity along collision normal
+            const rvn = (v1.x - v2.x) * nx + (v1.y - v2.y) * ny + (v1.z - v2.z) * nz;
+            if (rvn < 0) { // moving toward each other
+              const imp = -(1 + restitution) * rvn * 0.5;
+              v1.x += imp * nx; v1.y += imp * ny; v1.z += imp * nz;
+              v2.x -= imp * nx; v2.y -= imp * ny; v2.z -= imp * nz;
+
+              // Elastic squish impulse on impact
+              s1.userData.scaleImpulse = 0.82;
+              s2.userData.scaleImpulse = 0.82;
+            }
+          }
+        }
+
+        // Apply light friction
+        v1.multiplyScalar(0.99);
+
+        // Apply velocity
+        s1.position.add(v1);
+
+        // Spherical boundary bounce with dot product verification (avoids boundary sticking)
+        const rLen = s1.position.length();
+        if (rLen > boundaryRadius) {
+          const nx = s1.position.x / rLen, ny = s1.position.y / rLen, nz = s1.position.z / rLen;
+          s1.position.set(nx * boundaryRadius * 0.99, ny * boundaryRadius * 0.99, nz * boundaryRadius * 0.99);
+          
+          const dot = v1.x * nx + v1.y * ny + v1.z * nz;
+          if (dot > 0) { // reflect only if moving outward
+            v1.x -= (1 + restitution) * dot * nx;
+            v1.y -= (1 + restitution) * dot * ny;
+            v1.z -= (1 + restitution) * dot * nz;
+          }
+        }
+
+        // Auto spin
         s1.rotation.x += s1.userData.spinSpeed.x;
         s1.rotation.y += s1.userData.spinSpeed.y;
 
-        // Interpolate scale (hover effect)
-        s1.scale.x += (s1.userData.targetScale - s1.scale.x) * 0.15;
-        s1.scale.y += (s1.userData.targetScale - s1.scale.y) * 0.15;
-        s1.scale.z += (s1.userData.targetScale - s1.scale.z) * 0.15;
+        // Eased hover glow -> emissive tint
+        s1.userData.glow += ((s1.userData.targetScale > 1.05 ? 1 : 0) - s1.userData.glow) * 0.12;
+        s1.material.emissive.setRGB(
+          s1.userData.glow * 0.0,
+          s1.userData.glow * 0.28,
+          s1.userData.glow * 0.32
+        );
+
+        // Spring scaleImpulse back to 1.0
+        s1.userData.scaleImpulse += (1.0 - s1.userData.scaleImpulse) * 0.08;
+
+        // Interpolate scale (entrance grow-in * hover target * squish impulse)
+        const target = s1.userData.targetScale * s1.userData.entrance * s1.userData.scaleImpulse;
+        s1.scale.x += (target - s1.scale.x) * 0.15;
+        s1.scale.y += (target - s1.scale.y) * 0.15;
+        s1.scale.z += (target - s1.scale.z) * 0.15;
+      }
+
+      // Energy maintenance (thermostat) to prevent clumping or speed explosions
+      const targetSpeedSq = 0.00045; // average speed squared
+      const targetTotalEnergy = targetSpeedSq * spheres.length;
+      let currentTotalEnergy = 0;
+      spheres.forEach(s => {
+        currentTotalEnergy += s.userData.velocity.lengthSq();
+      });
+      
+      if (currentTotalEnergy > 0.00001) {
+        const ratio = Math.sqrt(targetTotalEnergy / currentTotalEnergy);
+        const blend = 0.05; // smooth speed adjustment
+        const adjust = 1.0 + (ratio - 1.0) * blend;
+        spheres.forEach(s => {
+          s.userData.velocity.multiplyScalar(adjust);
+        });
       }
     }
 
@@ -1292,14 +1549,13 @@ function handleContactSubmit(e) {
     const mouse = new THREE.Vector2();
     let isDragging = false;
     let previousMousePosition = { x: 0, y: 0 };
-    let rotationSpeedX = 0.002;
-    let rotationSpeedY = 0.002;
 
     container.addEventListener('mousemove', (e) => {
       // Calculate normalized mouse positions (-1 to +1) relative to canvas bounding box
       const rect = canvas3d.getBoundingClientRect();
       mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+      pointerActive = true;
 
       // Mouse drag rotation checks
       if (isDragging) {
@@ -1318,6 +1574,7 @@ function handleContactSubmit(e) {
     container.addEventListener('mouseleave', () => {
       mouse.x = 0;
       mouse.y = 0;
+      pointerActive = false;
     });
 
     container.addEventListener('mousedown', (e) => {
@@ -1337,6 +1594,7 @@ function handleContactSubmit(e) {
         const rect = canvas3d.getBoundingClientRect();
         mouse.x = ((e.touches[0].clientX - rect.left) / rect.width) * 2 - 1;
         mouse.y = -((e.touches[0].clientY - rect.top) / rect.height) * 2 + 1;
+        pointerActive = true;
 
         if (isDragging) {
           const deltaMove = {
@@ -1354,11 +1612,13 @@ function handleContactSubmit(e) {
       if (e.touches.length === 1) {
         isDragging = true;
         previousMousePosition = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        pointerActive = true;
       }
     });
 
     container.addEventListener('touchend', () => {
       isDragging = false;
+      pointerActive = false;
     });
 
     // 7. Render Animation Loop
@@ -1373,9 +1633,16 @@ function handleContactSubmit(e) {
       // Perform physics simulation
       updatePhysics();
 
-      // Check intersections
+      // Check intersections & project cursor 3D coordinates
       raycaster.setFromCamera(mouse, camera);
       const intersects = raycaster.intersectObjects(spheres);
+
+      if (pointerActive) {
+        const planeZ = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+        const targetIntersection = new THREE.Vector3();
+        raycaster.ray.intersectPlane(planeZ, targetIntersection);
+        pointer3D.copy(targetIntersection);
+      }
 
       spheres.forEach(s => {
         s.userData.targetScale = 1.0;
@@ -1384,9 +1651,7 @@ function handleContactSubmit(e) {
       if (intersects.length > 0) {
         const hitSphere = intersects[0].object;
         hitSphere.userData.targetScale = 1.35; // Scale up hovered company ball
-        
-        // Spin spin!
-        hitSphere.rotation.y += 0.04;
+        hitSphere.rotation.y += 0.04;          // Add spin
       }
 
       // Gentle continuous ambient orbit rotation + mouse follow tilt
