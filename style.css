@@ -125,6 +125,22 @@ textarea:focus-visible,
 }
 
 /* 3. Interactive Neural Background Canvas & Ambient Animations */
+#geo-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 1.6s ease;
+}
+
+#geo-canvas.geo-ready {
+  opacity: 1;
+}
+
 #neural-canvas {
   position: fixed;
   top: 0;
@@ -2821,6 +2837,15 @@ header.scrolled .glass-nav {
 
 .form-group {
   margin-bottom: 1.5rem;
+}
+
+/* Netlify spam honeypot — visually hidden, off-screen, not focusable/announced */
+.hidden-honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
 }
 
 .form-group label {

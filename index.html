@@ -6,7 +6,30 @@
   <title>Peeyush Tiwari | AI Engineer & Developer Portfolio</title>
   <meta name="description" content="Portfolio of Peeyush Tiwari - AI Engineer, Python Developer, and Android Developer. Pre-final year BCA student specializing in Agentic AI, OpenCV, and MVVM Kotlin apps.">
   <meta name="keywords" content="Peeyush Tiwari, AI Engineer, Python Developer, Android Developer, Agentic AI, Machine Learning, OpenCV, Portfolio">
-  
+  <meta name="author" content="Peeyush Tiwari">
+  <link rel="canonical" href="https://portfoliopeeyush.netlify.app/">
+
+  <!-- Favicon (uses existing profile image; swap for a dedicated favicon.ico when available) -->
+  <link rel="icon" type="image/jpeg" href="profile.jpg">
+  <link rel="apple-touch-icon" href="profile.jpg">
+  <meta name="theme-color" content="#060709">
+
+  <!-- Open Graph (LinkedIn, Facebook, WhatsApp, Slack) -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://portfoliopeeyush.netlify.app/">
+  <meta property="og:title" content="Peeyush Tiwari | AI Engineer & Developer Portfolio">
+  <meta property="og:description" content="Pre-final year BCA student specializing in Agentic AI, LLM integration, OpenCV, and native Kotlin apps. Open to internships & projects.">
+  <meta property="og:image" content="https://portfoliopeeyush.netlify.app/profile.jpg">
+  <meta property="og:image:alt" content="Peeyush Tiwari — AI Engineer & Developer">
+  <meta property="og:site_name" content="Peeyush Tiwari Portfolio">
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@Peeyush69537028">
+  <meta name="twitter:title" content="Peeyush Tiwari | AI Engineer & Developer Portfolio">
+  <meta name="twitter:description" content="Pre-final year BCA student specializing in Agentic AI, LLM integration, OpenCV, and native Kotlin apps. Open to internships & projects.">
+  <meta name="twitter:image" content="https://portfoliopeeyush.netlify.app/profile.jpg">
+
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -27,6 +50,7 @@
   <div class="custom-cursor-dot" id="custom-cursor-dot"></div>
 
   <!-- Interactive Background Canvas & Ambient Animations -->
+  <canvas id="geo-canvas"></canvas>
   <canvas id="neural-canvas"></canvas>
   <div class="bg-effects">
     <div class="glow-orb orb-1"></div>
@@ -846,7 +870,12 @@
           </div>
 
           <div class="contact-form-panel reveal-fade">
-            <form id="contact-form" onsubmit="handleContactSubmit(event)">
+            <form id="contact-form" name="contact" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" onsubmit="handleContactSubmit(event)">
+              <!-- Netlify form detection + spam honeypot -->
+              <input type="hidden" name="form-name" value="contact">
+              <p class="hidden-honeypot" aria-hidden="true">
+                <label>Don't fill this out if you're human: <input name="bot-field"></label>
+              </p>
               <div class="form-group">
                 <label for="name">Your Name</label>
                 <input type="text" id="name" name="name" required placeholder="Enter your name">

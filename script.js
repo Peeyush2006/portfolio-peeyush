@@ -88,7 +88,15 @@ function initPortfolioApp() {
       ctx = canvas.getContext('2d');
       let particleCount = window.innerWidth < 768 ? 60 : 115; // Adjust density based on device width
       const connectionDistance = 130; // Max distance to draw connecting lines
-      
+
+      // Track cursor locally for particle-to-mouse connections (scoped to this canvas).
+      // Start off-screen so no lines draw until the pointer actually moves.
+      let mouseX = -1000, mouseY = -1000;
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      }, { passive: true });
+
       // Track window size and adjust canvas dims
       function resizeCanvas() {
         if (!canvas) return;
@@ -1032,59 +1040,31 @@ function handleContactSubmit(e) {
   const originalText = btnText.textContent;
   btnText.textContent = 'Sending Message...';
 
-  // Replace this with your Web3Forms Access Key (Get one free at https://web3forms.com)
-  const accessKey = "YOUR_WEB3FORMS_ACCESS_KEY";
+  // Submit to Netlify Forms. The form is detected at build time via the
+  // data-netlify="true" attribute + hidden "form-name" field in index.html.
+  // Submissions appear in the Netlify dashboard (Forms tab) and can be
+  // emailed via a notification. No API key or third-party service required.
+  const payload = new URLSearchParams(new FormData(form)).toString();
 
-  if (accessKey === "YOUR_WEB3FORMS_ACCESS_KEY") {
-    // Fallback: If key is not set, simulate successful submission and warn in console
-    console.warn("Please replace 'YOUR_WEB3FORMS_ACCESS_KEY' in script.js to activate real email delivery.");
-    setTimeout(() => {
-      form.reset();
-      submitBtn.disabled = false;
-      btnText.textContent = originalText;
-      
-      // Show success overlay
-      successPanel.classList.add('show');
-      
-      // Hide success overlay after 4 seconds
-      setTimeout(() => {
-        successPanel.classList.remove('show');
-      }, 4000);
-    }, 1500);
-    return;
-  }
-  
-  // Real submission to Web3Forms
-  fetch("https://api.web3forms.com/submit", {
+  fetch("/", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json"
-    },
-    body: JSON.stringify({
-      access_key: accessKey,
-      name: name,
-      email: email,
-      message: message,
-      subject: `New Portfolio Message from ${name}`
-    })
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: payload
   })
-  .then(async (response) => {
-    let json = await response.json();
-    if (response.status == 200) {
+  .then((response) => {
+    if (response.ok) {
       form.reset();
       successPanel.classList.add('show');
       setTimeout(() => {
         successPanel.classList.remove('show');
       }, 4000);
     } else {
-      console.error(json);
-      alert("Error: " + json.message);
+      throw new Error(`Netlify responded with ${response.status}`);
     }
   })
   .catch((error) => {
-    console.error(error);
-    alert("Form submission failed. Please check your connection.");
+    console.error('Contact form submission failed:', error);
+    alert("Sorry, your message couldn't be sent. Please email me directly at peeyushtiwari03@gmail.com.");
   })
   .then(() => {
     submitBtn.disabled = false;
@@ -2031,3 +2011,192 @@ function handleContactSubmit(e) {
   });
 })();
 
+
+
+// ==========================================
+// 14. Full-Page 3D Rotating Wireframe Geometry Background
+// ==========================================
+(function() {
+  // Graceful exit if Three.js failed to load
+  if (typeof THREE === 'undefined') return;
+
+  window.addEventListener('load', () => {
+    try {
+      const canvas = document.getElementById('geo-canvas');
+      if (!canvas) return;
+
+      const prefersReduced = window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const isMobile = window.innerWidth < 768;
+
+      let width = window.innerWidth;
+      let height = window.innerHeight;
+
+      // 1. Scene, camera, renderer
+      const scene = new THREE.Scene();
+      // Fog fades distant shapes into the page background for real depth
+      scene.fog = new THREE.FogExp2(0x060709, 0.045);
+
+      const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 100);
+      camera.position.z = 12;
+
+      const renderer = new THREE.WebGLRenderer({
+        canvas: canvas,
+        alpha: true,
+        antialias: !isMobile
+      });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
+
+      // 2. Palette (matches CSS custom properties)
+      const CYAN = 0x00f2fe;
+      const PURPLE = 0x9b5de5;
+      const BLUE = 0x0066ff;
+      const ACCENT = 0xff007f;
+
+      // 3. Geometry factories - low detail keeps wireframes crisp & premium
+      const geoFactories = [
+        () => new THREE.IcosahedronGeometry(1, 0),
+        () => new THREE.TorusKnotGeometry(0.62, 0.22, 90, 10),
+        () => new THREE.OctahedronGeometry(1, 0),
+        () => new THREE.DodecahedronGeometry(1, 0),
+        () => new THREE.TorusGeometry(0.8, 0.3, 12, 44),
+      ];
+
+      // 4. Layout - scattered across x/y at varying depth (z)
+      let layout = [
+        { pos: [-6.2,  3.0,  -3], scale: 1.7,  color: CYAN,   type: 0 },
+        { pos: [ 6.4, -2.2,  -6], scale: 2.3,  color: PURPLE, type: 3 },
+        { pos: [-4.4, -4.0,  -1], scale: 1.2,  color: CYAN,   type: 2 },
+        { pos: [ 5.2,  4.2,  -9], scale: 2.7,  color: BLUE,   type: 1 },
+        { pos: [ 0.0,  0.4, -13], scale: 3.6,  color: PURPLE, type: 0 },
+        { pos: [-7.4, -1.2, -10], scale: 2.1,  color: ACCENT, type: 4 },
+        { pos: [ 3.4, -5.0,  -2], scale: 1.35, color: CYAN,   type: 2 },
+      ];
+      // Fewer shapes on small screens for performance
+      if (isMobile) layout = layout.filter((_, i) => i % 2 === 0);
+
+      // 5. Build shapes: crisp wireframe edges + faint glassy fill
+      const group = new THREE.Group();
+      const shapes = [];
+
+      layout.forEach((cfg, i) => {
+        const base = geoFactories[cfg.type]();
+
+        // Crisp polygon edges via wireframe geometry
+        const wire = new THREE.LineSegments(
+          new THREE.WireframeGeometry(base),
+          new THREE.LineBasicMaterial({
+            color: cfg.color,
+            transparent: true,
+            opacity: cfg.color === ACCENT ? 0.28 : 0.42,
+          })
+        );
+
+        // Faint translucent fill for a subtle "glass" body
+        const fill = new THREE.Mesh(
+          base,
+          new THREE.MeshBasicMaterial({
+            color: cfg.color,
+            transparent: true,
+            opacity: 0.035,
+            depthWrite: false,
+          })
+        );
+
+        const mesh = new THREE.Group();
+        mesh.add(fill);
+        mesh.add(wire);
+        mesh.position.set(cfg.pos[0], cfg.pos[1], cfg.pos[2]);
+        mesh.scale.setScalar(cfg.scale);
+        mesh.rotation.set(i * 0.7, i * 1.3, 0);
+
+        // Deterministic per-shape slow spin (varied direction/speed)
+        const dir = i % 2 === 0 ? 1 : -1;
+        mesh.userData.spin = {
+          x: dir * (0.0006 + (i % 3) * 0.00035),
+          y: dir * (0.0011 + (i % 4) * 0.0003),
+          z: (i % 2) * 0.0004,
+        };
+
+        group.add(mesh);
+        shapes.push(mesh);
+      });
+      scene.add(group);
+
+      // 6. Mouse parallax (whole scene gently follows the cursor)
+      const mouse = { x: 0, y: 0 };
+      const target = { x: 0, y: 0 };
+      if (!prefersReduced) {
+        window.addEventListener('mousemove', (e) => {
+          target.x = (e.clientX / window.innerWidth) * 2 - 1;
+          target.y = (e.clientY / window.innerHeight) * 2 - 1;
+        }, { passive: true });
+      }
+
+      // Fade the canvas in once the first frame is drawn
+      let revealed = false;
+      const reveal = () => {
+        if (revealed) return;
+        revealed = true;
+        canvas.classList.add('geo-ready');
+      };
+
+      // 7. Animate
+      let rafId = null;
+      function renderFrame() {
+        // Ease scene parallax toward the cursor
+        mouse.x += (target.x - mouse.x) * 0.04;
+        mouse.y += (target.y - mouse.y) * 0.04;
+        group.rotation.y = mouse.x * 0.28;
+        group.rotation.x = mouse.y * 0.18;
+        camera.position.x = mouse.x * 0.8;
+        camera.position.y = -mouse.y * 0.6;
+        camera.lookAt(scene.position);
+
+        // Per-shape self rotation
+        for (const s of shapes) {
+          const sp = s.userData.spin;
+          s.rotation.x += sp.x;
+          s.rotation.y += sp.y;
+          s.rotation.z += sp.z;
+        }
+
+        renderer.render(scene, camera);
+        reveal();
+      }
+
+      function loop() {
+        renderFrame();
+        rafId = requestAnimationFrame(loop);
+      }
+
+      if (prefersReduced) {
+        // Respect reduced motion: draw a single static frame, no animation
+        renderFrame();
+      } else {
+        loop();
+        // Pause the loop when the tab is hidden to save battery/GPU
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) {
+            if (rafId) { cancelAnimationFrame(rafId); rafId = null; }
+          } else if (!rafId) {
+            loop();
+          }
+        });
+      }
+
+      // 8. Resize
+      window.addEventListener('resize', () => {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        camera.aspect = width / height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(width, height);
+        if (prefersReduced) renderFrame();
+      });
+    } catch (err) {
+      console.error('3D geometry background initialization error:', err);
+    }
+  });
+})();
